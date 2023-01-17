@@ -46,4 +46,15 @@ module.exports = function (app) {
       onProxyRes,
     })
   );
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: apiUrl,
+      changeOrigin: true,
+      autoRewrite: true, // rewrite redirect host
+      protocolRewrite: 'https',
+      onProxyReq,
+      onProxyRes,
+    })
+  );
 };

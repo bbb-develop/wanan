@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useGetRoomHistories } from '../../api/getRoomHistories';
+import { useGetProfessions } from '../../api/getProfessions';
 import { usePostRoomMessage } from '../../api/postRoomMessage';
 import { useApplicationContext } from '../../providers/applicationProvider';
 
@@ -20,20 +21,25 @@ const StyledTopContainer = styled.div`
   margin-bottom: 12px;
 `;
 
+const StyledTitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const StyledTitle = styled.div`
   font-size: 14px;
   font-weight: bold;
 `;
 
 const StyledButton =styled.button`
-  border: 1px solid #ccc;
+  border: 1px solid #999;
   padding: 6px;
   border-radius: 6px;
 `;
 
 const StyledContent = styled.div`
   padding: 24px;
-  border: 1px solid #ccc;
+  border: 1px solid #999;
   border-radius: 12px;
   max-height: 100vh;
   overflow: auto;
@@ -55,7 +61,7 @@ const StyledMessage = styled.div`
       return 'unset';
     }};
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #999;
     border-radius: 12px;
 
     .audio {
@@ -63,11 +69,17 @@ const StyledMessage = styled.div`
     }
 
     .time {
-      color: #ccc;
+      color: #999;
       font-size: 6px;
       margin-top: 6px;
     }
   }
+`;
+
+const StyledTime = styled.div`
+  color: #999;
+  font-size: 6px;
+  margin-top: 6px;
 `;
 
 const StyledInputContainer = styled.div`
@@ -78,7 +90,7 @@ const StyledInputContainer = styled.div`
 const StyledInput = styled.input`
   width: 100%;
   margin-right: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #999;
   border-radius: 6px;
   padding: 3px 6px;
 `;
@@ -87,9 +99,15 @@ const RoomHistory = () => {
   const { roomId } = useParams();
   const { token } = useApplicationContext()
   const [info, setInfo] = useState({});
+  const [professionInfo, setProfessionInfo] = useState({});
   const [value, setValue] = useState('');
+
+  const userId = info?.other?.id;
+  const { lastActive } = professionInfo;
+
   const { getRoomHistories } = useGetRoomHistories();
   const { postRoomMessage } = usePostRoomMessage();
+  const { getProfessions } = useGetProfessions();
 
   const handleGetRoomHistories = () => {
     getRoomHistories({ token, roomId })
@@ -122,12 +140,22 @@ const RoomHistory = () => {
     }
   }, [token, roomId]);
 
+  useEffect(() => {
+    if (userId && token) {
+      getProfessions({ userId, token })
+        .then(setProfessionInfo);
+    }
+  }, [token, userId]);
+
   const { me, other: user, histories = [] } = info;
 
   return (
     <StyledContainer>
       <StyledTopContainer>
-        <StyledTitle>{user?.name}</StyledTitle>
+        <StyledTitleContainer>
+          <StyledTitle>{user?.name}</StyledTitle>
+          {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
+        </StyledTitleContainer>
         <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
       </StyledTopContainer>
       <StyledContent>

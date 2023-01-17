@@ -54,6 +54,18 @@ app.use(
   })
 );
 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: apiUrl,
+    changeOrigin: true,
+    autoRewrite: true, // rewrite redirect host
+    protocolRewrite: 'https',
+    onProxyReq,
+    onProxyRes,
+  })
+);
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
