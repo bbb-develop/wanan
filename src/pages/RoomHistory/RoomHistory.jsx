@@ -21,9 +21,25 @@ const StyledTopContainer = styled.div`
   margin-bottom: 12px;
 `;
 
+const StyledProfile = styled.div`
+  display: flex;
+`;
+
 const StyledTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const StyledImageContainer = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-right: 6px;
+  
+  img {
+    width: 100%;
+  }
 `;
 
 const StyledTitle = styled.div`
@@ -103,6 +119,7 @@ const RoomHistory = () => {
   const [value, setValue] = useState('');
 
   const userId = info?.other?.id;
+  const clearPicture = info?.other?.clearPicture;
   const { lastActive } = professionInfo;
 
   const { getRoomHistories } = useGetRoomHistories();
@@ -152,10 +169,15 @@ const RoomHistory = () => {
   return (
     <StyledContainer>
       <StyledTopContainer>
-        <StyledTitleContainer>
-          <StyledTitle>{user?.name}</StyledTitle>
-          {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
-        </StyledTitleContainer>
+        <StyledProfile>
+          <StyledImageContainer>
+            <img src={clearPicture?.url} />
+          </StyledImageContainer>
+          <StyledTitleContainer>
+            <StyledTitle>{user?.name}</StyledTitle>
+            {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
+          </StyledTitleContainer>
+        </StyledProfile>
         <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
       </StyledTopContainer>
       <StyledContent>
