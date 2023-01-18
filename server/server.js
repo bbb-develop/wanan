@@ -53,7 +53,7 @@ app.post('/api/login', (req, res) => {
  app.post('/api/logout', (req, res) => {
   req.session.destroy();
   res.clearCookie('b_sessionId');
-  res.end();
+  res.status(204).end();
  })
 
 app.use(
