@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetRoomHistories } from '../../api/getRoomHistories';
 import { useGetProfessions } from '../../api/getProfessions';
 import { usePostRoomMessage } from '../../api/postRoomMessage';
@@ -23,6 +23,7 @@ const StyledTopContainer = styled.div`
 
 const StyledProfile = styled.div`
   display: flex;
+  cursor: pointer;
 `;
 
 const StyledTitleContainer = styled.div`
@@ -45,6 +46,12 @@ const StyledImageContainer = styled.div`
 const StyledTitle = styled.div`
   font-size: 14px;
   font-weight: bold;
+
+  span.id {
+    color: #999;
+    font-size: 6px;
+    margin-top: 6px;
+  }
 `;
 
 const StyledButton =styled.button`
@@ -118,6 +125,8 @@ const RoomHistory = () => {
   const [professionInfo, setProfessionInfo] = useState({});
   const [value, setValue] = useState('');
 
+  const navigate = useNavigate();
+
   const userId = info?.other?.id;
   const clearPicture = info?.other?.clearPicture;
   const { lastActive, online } = professionInfo;
@@ -151,6 +160,10 @@ const RoomHistory = () => {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate(`/profession/${userId}`);
+  }
+
   useEffect(() => {
     if (roomId && token) {
       handleGetRoomHistories();
@@ -169,14 +182,16 @@ const RoomHistory = () => {
   return (
     <StyledContainer>
       <StyledTopContainer>
-        <StyledProfile>
+        <StyledProfile onClick={handleProfileClick}>
           <StyledImageContainer>
             <img src={clearPicture?.url} />
           </StyledImageContainer>
           <StyledTitleContainer>
-            <StyledTitle>{user?.name}</StyledTitle>
+            <StyledTitle>
+              {user?.name}
+              <span className="id">{`(${userId})`}</span>
+            </StyledTitle>
             {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
-            <StyledTime>{userId}</StyledTime>
             <StyledTime>{online ? '🟢online' : '⚪️offline'}</StyledTime>
           </StyledTitleContainer>
         </StyledProfile>

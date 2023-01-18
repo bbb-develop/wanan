@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home } from '../pages/Home';
 import { RoomHistory } from '../pages/RoomHistory';
+import { ProfessionInfo } from '../pages/ProfessionInfo';
 
 const routes = [
   {
@@ -14,6 +15,12 @@ const routes = [
     name: 'RoomHistory',
     path: '/room/histories/:roomId',
     component: <RoomHistory />,
+  },
+  {
+    id: 'profession-info',
+    name: 'ProfessionInfo',
+    path: '/profession/:userId',
+    component: <ProfessionInfo />,
   },
 ];
 
