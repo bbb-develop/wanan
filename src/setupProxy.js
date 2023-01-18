@@ -1,3 +1,4 @@
+const session = require('express-session');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,6 +10,12 @@ module.exports = function (app) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
+  app.use(session({
+    secret : 's3Cur3',
+    name : 'b_sessionId',
+   })
+ );
+
 
   app.use(
     '/api/rooms',
