@@ -120,7 +120,7 @@ const ProfessionInfo = () => {
             <StyledDescription>
               {
                 interests.map((interest) => (
-                  <span className="desc">{interest?.title}</span>
+                  <span key={interest.title} className="desc">{interest?.title}</span>
                 ))
               }
             </StyledDescription>
@@ -145,12 +145,12 @@ const ProfessionInfo = () => {
             </StyledDescription>
           </StyledDescriptionContainer>
         </StyledProfile>
-        <StyledAudio controls type="audio/mpeg" muted>
-          <source src={voice?.asset?.url} />
+        <StyledAudio controls muted>
+          <source type="audio/mpeg" src={voice?.asset?.url} />
         </StyledAudio>
         {
           profilePictures.map((image) => (
-            <StyledImageContainer>
+            <StyledImageContainer key={image?.url}>
               <img alt="profile" src={image?.url} />
             </StyledImageContainer>
           ))
