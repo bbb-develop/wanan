@@ -13,7 +13,6 @@ const onProxyReq = (proxyReq, req) => {
 
 const onProxyRes = (proxyRes, req) => {
   proxyRes.on('data', (dataBuffer) => {
-    console.log(proxyRes.headers);
     if (proxyRes.headers['content-encoding'] === 'gzip') {
       zlib.unzip(dataBuffer, (error, dataBuffer) => {
         if (dataBuffer) {
