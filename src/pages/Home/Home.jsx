@@ -89,6 +89,13 @@ const Home = () => {
       .catch(() => {setLogin(false)});
   };
 
+  const handleKeypress = (e) => {
+    //it triggers by pressing the enter key
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+      handleSubmit();
+    }
+  };
+
   const handleLogout = () => {
     logout().then(() => {
       setLogin(false);
@@ -109,7 +116,11 @@ const Home = () => {
         <StyledForm>
           <StyledInputContainer>
             <label>Name</label>
-            <StyledInput value={name} onChange={handleNameChange} />
+            <StyledInput
+              value={name}
+              onChange={handleNameChange}
+              onKeyPress={handleKeypress}
+            />
           </StyledInputContainer>
           <StyledInputContainer>
             <label>Password</label>
@@ -117,6 +128,7 @@ const Home = () => {
               type="password"
               value={password}
               onChange={handlePasswordChange}
+              onKeyPress={handleKeypress}
             />
           </StyledInputContainer>
           <StyledButton type="button" onClick={handleSubmit}>

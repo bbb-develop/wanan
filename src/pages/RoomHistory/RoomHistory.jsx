@@ -154,7 +154,6 @@ const RoomHistory = () => {
 
   const handleKeypress = (e) => {
     //it triggers by pressing the enter key
-    console.log(e);
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
       handleSubmit();
     }
