@@ -120,7 +120,7 @@ const RoomHistory = () => {
 
   const userId = info?.other?.id;
   const clearPicture = info?.other?.clearPicture;
-  const { lastActive } = professionInfo;
+  const { lastActive, online } = professionInfo;
 
   const { getRoomHistories } = useGetRoomHistories();
   const { postRoomMessage } = usePostRoomMessage();
@@ -176,6 +176,8 @@ const RoomHistory = () => {
           <StyledTitleContainer>
             <StyledTitle>{user?.name}</StyledTitle>
             {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
+            <StyledTime>{userId}</StyledTime>
+            <StyledTime>{online ? '🟢online' : '⚪️offline'}</StyledTime>
           </StyledTitleContainer>
         </StyledProfile>
         <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
