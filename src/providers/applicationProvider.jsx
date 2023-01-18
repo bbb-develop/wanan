@@ -19,11 +19,14 @@ const ApplicationContext = createContext({
 
 const useApplicationProvider = () => {
   const [token, setToken] = useState();
+  const [isLogin, setLogin] = useState(false);
 
   return ({
     token,
     setToken,
     accountConfigs,
+    isLogin,
+    setLogin,
   })
 };
 
