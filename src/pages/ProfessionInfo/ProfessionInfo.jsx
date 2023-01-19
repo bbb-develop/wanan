@@ -81,6 +81,13 @@ const StyledJSON = styled.div`
   white-space: pre;
 `;
 
+const StyledButton =styled.button`
+  border: 1px solid #999;
+  padding: 6px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+`;
+
 const ProfessionInfo = () => {
   const { token } = useApplicationContext()
   const { userId } = useParams();
@@ -108,16 +115,21 @@ const ProfessionInfo = () => {
     ...rest
   } = professionInfo;
 
+  const handleGetProfessions = () => {
+    getProfessions({ userId, token })
+    .then(setProfessionInfo);
+  };
+
   useEffect(() => {
     if (userId && token) {
-      getProfessions({ userId, token })
-        .then(setProfessionInfo);
+      handleGetProfessions();
     }
   }, [token, userId]);
 
   return (
     <StyledContainer>
       <StyledContent>
+        <StyledButton onClick={() => handleGetProfessions()}>Refresh</StyledButton>
         <StyledProfile>
           <StyledImageContainer>
             <img alt="profile" src={profilePicture?.url} />
