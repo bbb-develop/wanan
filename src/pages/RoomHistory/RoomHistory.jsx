@@ -87,6 +87,12 @@ const StyledMessage = styled.div`
     border: 1px solid #999;
     border-radius: 12px;
 
+    img.sticker {
+      width: 50px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+    }
+
     .audio {
       color: green;
     }
@@ -217,6 +223,13 @@ const RoomHistory = () => {
                       Audio
                     </a>
                   )}
+                  { history?.roomType === 6 && (
+                    <img
+                      className="sticker"
+                      alt={history?.gift?.name || 'sticker'}
+                      src={history?.gift?.image}
+                    />
+                  ) }
                   { history?.roomType === 4 && history?.message}
                   { history?.roomType === 3 && 'Phone Call'}
                   <span className="time">{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(history?.updatedAt))}</span>
