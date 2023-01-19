@@ -34,12 +34,13 @@ const StyledTitleContainer = styled.div`
 const StyledImageContainer = styled.div`
   width: 50px;
   height: 50px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
   margin-right: 6px;
   
   img {
+    border: 1px solid #ccc;
+    border-radius: 6px;
     width: 100%;
+    height: 100%;
   }
 `;
 
@@ -135,7 +136,7 @@ const RoomHistory = () => {
 
   const userId = info?.other?.id;
   const clearPicture = info?.other?.clearPicture;
-  const { lastActive, online } = professionInfo;
+  const { lastActive, online, busy, callable } = professionInfo;
 
   const { getRoomHistories } = useGetRoomHistories();
   const { postRoomMessage } = usePostRoomMessage();
@@ -197,7 +198,8 @@ const RoomHistory = () => {
               <span className="id">{`(${userId})`}</span>
             </StyledTitle>
             {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
-            <StyledTime>{online ? '🟢online' : '⚪️offline'}</StyledTime>
+            <StyledTime>online: {online ? '🟢' : '⚪️'}, busy: {busy ? '🔴' : '⚪️'}, callable: {callable ? '🟢' : '🔴' }</StyledTime>
+            <StyledTime></StyledTime>
           </StyledTitleContainer>
         </StyledProfile>
         <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
