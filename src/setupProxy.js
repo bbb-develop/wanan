@@ -7,6 +7,7 @@ const { onProxyReq, onProxyRes } = require('../server/proxy');
 const apiUrl = 'https://newapi.goodnight.io';
 
 function isAuthenticated (req, res, next) {
+  console.log(req.session);
   if (req.session.user) next();
   else {
     return res.status(403).json({ message: 'Auth fail.'});

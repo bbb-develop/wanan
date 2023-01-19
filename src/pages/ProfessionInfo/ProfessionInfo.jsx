@@ -145,9 +145,13 @@ const ProfessionInfo = () => {
             </StyledDescription>
           </StyledDescriptionContainer>
         </StyledProfile>
-        <StyledAudio controls muted>
-          <source type="audio/mpeg" src={voice?.asset?.url} />
-        </StyledAudio>
+        {
+          voice?.asset?.url && (
+            <StyledAudio controls muted>
+              <source preload="auto" type="audio/mpeg" src={voice.asset.url} />
+            </StyledAudio>
+          )
+        }
         {
           profilePictures.map((image) => (
             <StyledImageContainer key={image?.url}>
