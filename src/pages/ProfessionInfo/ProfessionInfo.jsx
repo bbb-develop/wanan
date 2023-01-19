@@ -16,7 +16,8 @@ const StyledContent = styled.div`
   border: 1px solid #999;
   border-radius: 12px;
   max-height: 100vh;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 `;
 
@@ -35,6 +36,10 @@ const StyledImageContainer = styled.div`
   img {
     width: 100%;
     max-width: 200px;
+
+    @media (max-width: 600px) {
+      max-width: unset;
+    }
   }
 `;
 
@@ -69,6 +74,13 @@ const StyledAudio = styled.audio`
   margin-bottom: 12px;
 `;
 
+const StyledJSON = styled.div`
+  width: 100%;
+  overflow: hidden;
+  word-break: break-word;
+  white-space: pre;
+`;
+
 const ProfessionInfo = () => {
   const { token } = useApplicationContext()
   const { userId } = useParams();
@@ -93,6 +105,7 @@ const ProfessionInfo = () => {
     profilePicture,
     profilePictures = [],
     voice,
+    ...rest
   } = professionInfo;
 
   useEffect(() => {
@@ -159,7 +172,7 @@ const ProfessionInfo = () => {
             </StyledImageContainer>
           ))
         }
-        {JSON.stringify(professionInfo, null, 4)}
+        <StyledJSON>{JSON.stringify(rest, '\n', 4)}</StyledJSON>
       </StyledContent>
     </StyledContainer>
   )
