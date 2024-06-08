@@ -3,6 +3,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { onProxyReq, onProxyRes } = require("../server/proxy");
+const { check } = require("../server/check");
 
 const apiUrl = "https://newapi.goodnight.io";
 
@@ -101,4 +102,20 @@ module.exports = function (app) {
       onProxyRes,
     })
   );
+
+  app.get("/rdm/check", async (req, res) => {
+    const type = req.query.type;
+
+    if (type === "on" || type === "dismiss") {
+      res.setHeader("Content-Type", "image/png");
+      const screenshot = await check(type);
+      res.send(screenshot);
+    }
+
+    res.status(400).json({ message: "Invalid type." });
+  });
+
+  app.get("/health", (req, res) => {
+    res.status(204);
+  });
 };
