@@ -113,7 +113,7 @@ app.use(
 app.get("/rdm/check", async (req, res) => {
   const type = req.query.type;
 
-  if (type === "on" || type === "dismiss") {
+  if (type === "on" || type === "dismiss" || type === "test") {
     res.setHeader("Content-Type", "image/png");
     const screenshot = await check(type);
     res.send(screenshot);
