@@ -13,7 +13,7 @@ const check = async (type) => {
   }
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     slowMo: 50,
   });
 
