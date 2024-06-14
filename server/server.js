@@ -123,7 +123,8 @@ app.get("/rdm/check", async (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  res.status(204);
+  console.log('health');
+  res.status(200).json({ message: 'health' });
 });
 
 app.get("*", (req, res) => {
