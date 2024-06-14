@@ -116,6 +116,7 @@ module.exports = function (app) {
   });
 
   app.get("/health", (req, res) => {
-    res.status(204);
+    console.log('health');
+    res.status(200).json({ message: 'health' });
   });
 };

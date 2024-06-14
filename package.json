@@ -26,7 +26,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
-    "start": "npm run build && NODE_ENV=production node ./server/server.js",
+    "start": "npx puppeteer browsers install chrome && npm run build && NODE_ENV=production node ./server/server.js",
     "start:server": "NODE_ENV=production node ./server/server.js",
     "build": "react-scripts build",
     "prod": "npm run build && NODE_ENV=production node ./server/server.js",

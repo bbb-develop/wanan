@@ -56,6 +56,11 @@ const check = async (type) => {
     console.log("下班打卡");
   }
 
+  if ((type === "test")) {
+    await sleep(5000);
+    console.log('test');
+  }
+
   const fileElement = await page.waitForSelector('#att_status_div');
 
   const img = await fileElement.screenshot();
