@@ -110,9 +110,9 @@ module.exports = function (app) {
       res.setHeader("Content-Type", "image/png");
       const screenshot = await check(type);
       res.send(screenshot);
+    } else {
+      res.status(400).json({ message: "Invalid type." });
     }
-
-    res.status(400).json({ message: "Invalid type." });
   });
 
   app.get("/health", (req, res) => {
