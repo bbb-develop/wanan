@@ -136,7 +136,7 @@ const RoomHistory = () => {
 
   const userId = info?.other?.id;
   const clearPicture = info?.other?.clearPicture;
-  const { lastActive, online, busy, callable } = professionInfo;
+  const { lastActive, online, busy, callable, distance } = professionInfo;
 
   const { getRoomHistories } = useGetRoomHistories();
   const { postRoomMessage } = usePostRoomMessage();
@@ -170,6 +170,29 @@ const RoomHistory = () => {
     navigate(`/profession/${userId}`);
   }
 
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      // handleGetRoomHistories();
+      console.log('fuck');
+    }
+  }, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  });
+
+  useEffect(() => {
+    const target = document.querySelector('#scroll-anchor');
+    if (target) {
+      observer.observe(target);
+    }
+    return () => {
+      if (target) {
+        observer.unobserve(target);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (roomId && token) {
       handleGetRoomHistories();
@@ -198,13 +221,15 @@ const RoomHistory = () => {
               <span className="id">{`(${userId})`}</span>
             </StyledTitle>
             {lastActive && (<StyledTime>{new Intl.DateTimeFormat('default', { dateStyle: 'full', timeStyle: 'long', timeZone: 'Asia/Taipei' }).format(new Date(lastActive))}</StyledTime>)}
-            <StyledTime>online: {online ? '🟢' : '⚪️'}, busy: {busy ? '🔴' : '⚪️'}, callable: {callable ? '🟢' : '🔴' }</StyledTime>
-            <StyledTime></StyledTime>
+            <StyledTime>online: {online ? '🟢' : '⚪️'}, busy: {busy ? '🔴' : '⚪️'}, callable: {callable ? '🟢' : '🔴' }, {Number(distance).toFixed(3)}km</StyledTime>
+            <StyledTime>
+            </StyledTime>
           </StyledTitleContainer>
         </StyledProfile>
         <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
       </StyledTopContainer>
       <StyledContent>
+        <div id="#scroll-anchor" />
         {
           histories.map((history) => {
             const isMe = history?.user?.id === me?.id;

@@ -140,7 +140,7 @@ const ProfessionInfo = () => {
               <span className="title">{`${name}, ${age}`}</span>
             </StyledDescription>
             <StyledDescription>
-              <span className="title">{`${Number(distance).toFixed(2)}km, gLevel: ${gLevel}`}</span>
+              <span className="title">{`${Number(distance).toFixed(3)}km, gLevel: ${gLevel}`}</span>
             </StyledDescription>
             <StyledDescription>
               {

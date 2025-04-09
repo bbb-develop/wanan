@@ -8,7 +8,6 @@ const { check } = require("../server/check");
 const apiUrl = "https://newapi.goodnight.io";
 
 function isAuthenticated(req, res, next) {
-  console.log(req.session);
   if (req.session.user) next();
   else {
     return res.status(403).json({ message: "Auth fail." });
@@ -76,6 +75,18 @@ module.exports = function (app) {
     })
   );
   app.use(
+    "/api/mates/pending",
+    isAuthenticated,
+    createProxyMiddleware({
+      target: apiUrl,
+      changeOrigin: true,
+      autoRewrite: true, // rewrite redirect host
+      protocolRewrite: "https",
+      onProxyReq,
+      onProxyRes,
+    })
+  );
+  app.use(
     "/api/room/histories",
     isAuthenticated,
     createProxyMiddleware({
@@ -116,7 +127,6 @@ module.exports = function (app) {
   });
 
   app.get("/health", (req, res) => {
-    console.log('health');
     res.status(200).json({ message: 'health' });
   });
 };

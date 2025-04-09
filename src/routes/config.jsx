@@ -22,6 +22,12 @@ const routes = [
     path: '/profession/:userId',
     component: <ProfessionInfo />,
   },
+{
+    id: 'mates-pending',
+    name: 'MatesPending',
+    path: '/mates/pending',
+    component: <div />,
+},
 ];
 
 export default routes;

@@ -13,6 +13,17 @@ export const accountConfigs = [
   }
 ];
 
+const defaultDeviceConfig = {
+  countryCode: 'TW',
+  deviceModel: 'iPhone',
+  deviceSystemName: 'iOS',
+  deviceSystemVersion: '16.0.2',
+  appVersion: '1.146.0',
+  buildNumber: '1.146.0.4',
+  locale: 'en-TW',
+  deviceToken: '0728EBDE-7B0E-47EB-A130-2D0E1630F432',
+}
+
 const ApplicationContext = createContext({
   token: undefined,
 });
@@ -27,6 +38,7 @@ const useApplicationProvider = () => {
     accountConfigs,
     isLogin,
     setLogin,
+    deviceConfig: defaultDeviceConfig,
   })
 };
 

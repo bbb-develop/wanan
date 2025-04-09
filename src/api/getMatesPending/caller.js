@@ -5,7 +5,6 @@ const caller = (data) => {
   const {
     limit = 50,
     offset = 0,
-    type = 'normal',
     countryCode = 'TW',
     deviceModel = 'iPhone',
     deviceSystemName = 'iOS',
@@ -16,15 +15,12 @@ const caller = (data) => {
     deviceToken = '0728EBDE-7B0E-47EB-A130-2D0E1630F432',
     codePushVersion = 'v2',
     viewFrom = 'friend',
-    // lon = '121.29317082290291',
-    // lat = '25.03935771102818',
     token,
-    userId,
   } = data;
   
-  if (!token || !userId) return;
+  if (!token) return;
 
-  const url = `/professions/${userId}`;
+  const url = `/mates/pending`;
 
   return ({
     method: Method.GET,
@@ -32,7 +28,6 @@ const caller = (data) => {
     data: humps.decamelizeKeys({
       limit,
       offset,
-      type,
       countryCode,
       deviceModel,
       deviceSystemName,
@@ -44,7 +39,6 @@ const caller = (data) => {
       codePushVersion,
       viewFrom,
       token,
-      userId,
     }),
   });
 };

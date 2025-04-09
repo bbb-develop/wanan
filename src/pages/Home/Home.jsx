@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isNil } from 'lodash';
 import { useGetRooms } from '../../api/getRooms';
+import { useGetMatesPending } from '../../api/getMatesPending';
 import { useLogin } from '../../api/login';
 import { useLogout } from '../../api/logout';
 import { Room } from '../../components/Room';
+import { LocationForm } from '../../components/LocationForm';
 import { useApplicationContext } from '../../providers/applicationProvider';
 
 const StyledContainer = styled.div`
@@ -63,11 +65,12 @@ const StyledRoom = styled(Room)`
 `;
 
 const Home = () => {
-  const [rooms, setRooms] = useState([])
+  const [rooms, setRooms] = useState([]);
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const { token, setToken, accountConfigs, isLogin, setLogin } = useApplicationContext()
+  const { token, setToken, accountConfigs, isLogin, setLogin, deviceConfig } = useApplicationContext();
   const { getRooms } = useGetRooms();
+  const { getMatesPending } = useGetMatesPending();
   const { login } = useLogin();
   const { logout } = useLogout();
 
@@ -107,6 +110,7 @@ const Home = () => {
     if (!isNil(token)) {
       getRooms({ token })
         .then(setRooms);
+      // getMatesPending({ token })
     }
   }, [token, isLogin]);
 
@@ -151,6 +155,8 @@ const Home = () => {
           <div className="token">{`${token || "Unselected"}`}</div>
         </StyledTopContainer>
       )}
+
+      {token && <LocationForm />}
 
       <div>
         {rooms.map((room) => (
