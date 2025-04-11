@@ -67,7 +67,17 @@ const StyledContent = styled.div`
   border-radius: 12px;
   max-height: 100vh;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
+`;
+
+const StyledLoadMore = styled.div`
+  width: 100%;
+  height: 48px;
+  border: 1px solid;
+  line-height: 48px;
+  display: flex;
+  justify-content: center;
 `;
 
 const StyledMessage = styled.div`
@@ -78,6 +88,8 @@ const StyledMessage = styled.div`
   .text {
     display: inline-flex;
     flex-direction: column;
+    overflow-wrap: break-word;
+    text-align: left;
     max-width: 90%;
     color: ${({ roomType }) => {
       if (roomType === 5) return 'green';
@@ -125,11 +137,18 @@ const StyledInput = styled.input`
   padding: 3px 6px;
 `;
 
+const defaultPage = {
+  limit: 50,
+  offset: 0,
+};
+
 const RoomHistory = () => {
   const { roomId } = useParams();
-  const { token } = useApplicationContext()
+  const { token, deviceConfig } = useApplicationContext();
   const [info, setInfo] = useState({});
+  const [histories, setHistories] = useState([]);
   const [professionInfo, setProfessionInfo] = useState({});
+  const [page, setPage] = useState(defaultPage);
   const [value, setValue] = useState('');
 
   const navigate = useNavigate();
@@ -142,20 +161,39 @@ const RoomHistory = () => {
   const { postRoomMessage } = usePostRoomMessage();
   const { getProfessions } = useGetProfessions();
 
-  const handleGetRoomHistories = () => {
-    getRoomHistories({ token, roomId })
-      .then(setInfo);
+  const handleGetRoomHistories = ({ page }) => {
+    const { limit, offset } = page;
+    getRoomHistories({ token, roomId, deviceConfig, offset, limit })
+      .then((data) => {
+        const { me, other, histories = [] } = data
+        setInfo({ me, other })
+        if (page.offset === 0) {
+          setHistories(histories);
+        } else {
+          setHistories((prev) => [...histories, ...prev]);
+        }
+      });
   };
+
+  const handleLoadMore = () => {
+    setPage((prev) => ({ ...prev, offset: prev.offset + prev.limit }));
+  }
 
   const handleInputChange = (event) => {
     setValue(event.target.value);
   };
 
+  const handleRefresh = () => {
+    setPage(defaultPage)
+    handleGetRoomHistories({ page: defaultPage });
+  }
+
   const handleSubmit = () => {
     postRoomMessage({ message: value, token, roomId })
       .then(() => {
         setValue('');
-        handleGetRoomHistories();
+        setPage(defaultPage)
+        handleGetRoomHistories({ page: defaultPage });
       });
   };
 
@@ -170,34 +208,10 @@ const RoomHistory = () => {
     navigate(`/profession/${userId}`);
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      // handleGetRoomHistories();
-      console.log('fuck');
-    }
-  }, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1.0
-  });
-
   useEffect(() => {
-    const target = document.querySelector('#scroll-anchor');
-    if (target) {
-      observer.observe(target);
+    if (roomId && token) { handleGetRoomHistories({ page });
     }
-    return () => {
-      if (target) {
-        observer.unobserve(target);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (roomId && token) {
-      handleGetRoomHistories();
-    }
-  }, [token, roomId]);
+  }, [token, roomId, page.offset]);
 
   useEffect(() => {
     if (userId && token) {
@@ -206,7 +220,7 @@ const RoomHistory = () => {
     }
   }, [token, userId]);
 
-  const { me, other: user, histories = [] } = info;
+  const { me, other: user } = info;
 
   return (
     <StyledContainer>
@@ -226,10 +240,10 @@ const RoomHistory = () => {
             </StyledTime>
           </StyledTitleContainer>
         </StyledProfile>
-        <StyledButton onClick={() => handleGetRoomHistories()}>Refresh</StyledButton>
+        <StyledButton onClick={handleRefresh}>Refresh</StyledButton>
       </StyledTopContainer>
       <StyledContent>
-        <div id="#scroll-anchor" />
+        <StyledLoadMore onClick={handleLoadMore}>Load More</StyledLoadMore>
         {
           histories.map((history) => {
             const isMe = history?.user?.id === me?.id;

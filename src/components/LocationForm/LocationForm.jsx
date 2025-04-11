@@ -31,15 +31,39 @@ const LocationSelect = styled.select`
   padding: 6px;
 `;
 
+// Validation function for coordinates
+const validateCoordinates = (lat, lon) => {
+  const latNum = parseFloat(lat);
+  const lonNum = parseFloat(lon);
 
+  // Check if values are valid numbers
+  if (isNaN(latNum) || isNaN(lonNum)) {
+    return 'Invalid coordinates: Please enter numeric values.';
+  }
 
+  // Check latitude range (-90 to 90)
+  if (latNum < -90 || latNum > 90) {
+    return 'Invalid latitude: Must be between -90 and 90.';
+  }
+
+  // Check longitude range (-180 to 180)
+  if (lonNum < -180 || lonNum > 180) {
+    return 'Invalid longitude: Must be between -180 and 180.';
+  }
+
+  return ''; // No errors
+};
 
 const locationOptions = [
   { label: '大巨蛋', value: { lat: 25.042621362735623, lon: 121.55992502167489 } },
+  { label: '行天宮', value: { lat: 25.062967889746403, lon: 121.53387135585557 } },
+  { label: '藝文特區', value: { lat: 25.0174559440566, lon: 121.29944826179351 } },
   { label: 'Fang - 曾俊睿小兒科診所', value: { lat: 24.97527985738381, lon: 121.54603710858564 } },
+  { label: 'Fang - 陳炯輝小兒科診所', value: { lat: 25.058086586093694, lon: 121.53128670099771 } },
+  { label: 'Fang - 裕隆城', value: { lat: 24.978073411183676, lon: 121.54682518519282 } },
   { label: 'Fang - 康和春秋大樓', value: { lat: 24.98248339678915, lon: 121.54292490459738 } },
   { label: 'Fang - 群鑫當鋪', value: { lat: 24.981968695024573, lon: 121.5438976373802 } },
-  { label: 'Fang_公館 - 十盛奶茶公館', value: { lat: 25.01373675631062, lon: 121.53394691720122 } },
+  { label: 'Fang - 公館_十盛奶茶公館', value: { lat: 25.01373675631062, lon: 121.53394691720122 } },
 ];
 
 const LocationForm = () => {
@@ -58,6 +82,30 @@ const LocationForm = () => {
       setLon(selectedLocation.value.lon);
     }
   };
+
+  const handlePaste = (e) => {
+    // Prevent default paste behavior
+    e.preventDefault();
+
+    // Get pasted text
+    const pastedText = e.clipboardData.getData('text').trim();
+
+    // Split by comma and remove whitespace
+    const [pastedLat, pastedLon] = pastedText.split(',').map((coord) => coord.trim());
+
+    // Validate coordinates
+    const validationError = validateCoordinates(pastedLat, pastedLon);
+
+    if (validationError) {
+      setError(validationError);
+      setLat('');
+      setLon('');
+      return;
+    } 
+
+    setLat(pastedLat);
+    setLon(pastedLon);
+  }
 
   const handleLatChange = (event) => {
     setLat(event.target.value);
@@ -84,12 +132,14 @@ const LocationForm = () => {
         placeholder="Latitude"
         value={lat}
         onChange={handleLatChange}
+        onPaste={handlePaste}
       />
       <LocationInput
         type="number"
         placeholder="Longitude"
         value={lon}
         onChange={handleLonChange}
+        onPaste={handlePaste}
       />
       <div style={{ height: '24px', color: 'red' }}>{error}</div>
 

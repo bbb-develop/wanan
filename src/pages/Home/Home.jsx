@@ -108,7 +108,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!isNil(token)) {
-      getRooms({ token })
+      getRooms({ token, deviceConfig })
         .then(setRooms);
       // getMatesPending({ token })
     }

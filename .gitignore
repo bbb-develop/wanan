@@ -28,4 +28,4 @@ webpack-assets.json
 
 .vscode/settings.json
 
-
+.cache/
